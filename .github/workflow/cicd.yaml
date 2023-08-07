@@ -1,0 +1,70 @@
+name: CI + CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Compile
+        run: |
+          echo "Compiling..."
+          echo "Compiled!"
+
+  DeployDev:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    environment:
+      name: Development
+      url: "http://dev.example.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to dev..."
+          echo "Deployed to dev!"
+
+  DeployStaging:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Staging
+      url: "http://staging.example.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to staging..."
+          echo "Deployed to staging!"
+
+  DeployProd:
+    needs: DeployStaging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Production
+      url: "http://example.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to production..."
+          echo "Deployed to production!"

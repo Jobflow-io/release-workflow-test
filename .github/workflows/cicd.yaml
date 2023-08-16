@@ -37,6 +37,22 @@ jobs:
           echo "Deploying to dev..."
           echo "Deployed to dev!"
 
+  DeployDevBusiness:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    environment:
+      name: Development_business_app
+      url: "http://dev.business.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to dev business..."
+          echo "Deployed to dev business!"
+
   DeployStaging:
     needs: Build
     runs-on: ubuntu-latest
@@ -53,6 +69,22 @@ jobs:
           echo "Deploying to staging..."
           echo "Deployed to staging!"
 
+  DeployStagingBusiness:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Staging_business_app
+      url: "http://staging.business.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to staging business..."
+          echo "Deployed to staging business!"
+
   DeployProd:
     needs: DeployStaging
     runs-on: ubuntu-latest
@@ -68,3 +100,19 @@ jobs:
         run: |
           echo "Deploying to production..."
           echo "Deployed to production!"
+
+  DeployProdBusiness:
+    needs: DeployStagingBusiness
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Production_business_app
+      url: "http://business.com"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo "Deploying to production business..."
+          echo "Deployed to production business!"

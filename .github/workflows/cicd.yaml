@@ -64,6 +64,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Build Docker image
+        run: |
+          echo "Build an push image: build:$GITHUB_SHA"
+
       - name: Deploy
         run: |
           echo "Deploying to staging..."
@@ -79,6 +83,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          echo "Build an push image: business-image:$GITHUB_SHA"
 
       - name: Deploy
         run: |
@@ -98,7 +106,7 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "Deploying to production..."
+          echo "Deploying to production, image:$GITHUB_SHA"
           echo "Deployed to production!"
 
   DeployProdBusiness:
@@ -114,5 +122,5 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "Deploying to production business..."
+          echo "Deploying to production business, business-image:$GITHUB_SHA"
           echo "Deployed to production business!"
